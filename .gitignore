@@ -4,3 +4,4 @@
 .env
 api/.env
 client/.env
+.vscode/

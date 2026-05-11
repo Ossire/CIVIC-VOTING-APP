@@ -1,0 +1,63 @@
+<div class="results-container">
+    <header class="results-header">
+        <div class="header-main">
+            <span class="live-tag">LIVE ARCHIVE</span>
+            <h1>{{ pollTitle() }}</h1>
+            <p class="stats">TOTAL VERIFIED ENTRIES: <strong>{{ totalVotes() | number }}</strong></p>
+        </div>
+        <div class="leader-card">
+            <span class="label">CURRENT LEADER</span>
+            <span class="name">ALEX JOHNSON</span>
+            <span class="percentage">46.7%</span>
+        </div>
+    </header>
+
+    <section class="dashboard-grid">
+        <div class="chart-card">
+            <h3>OVERALL STANDINGS</h3>
+            <div class="canvas-container">
+                <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType">
+                </canvas>
+            </div>
+        </div>
+
+        <div class="quick-stats">
+            <div class="stat-box">
+                <span class="stat-label">Margin of Lead</span>
+                <span class="stat-value">+300 Votes</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Reporting States</span>
+                <span class="stat-value">36/36</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="analysis-section">
+        <h3 class="section-title">REGIONAL DATA LOG (STATE-BY-STATE)</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>STATE</th>
+                        <th>ALEX JOHNSON</th>
+                        <th>SARAH WILLIAMS</th>
+                        <th>MICHAEL CHEN</th>
+                        <th>TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (row of stateBreakdown(); track row.state) {
+                    <tr>
+                        <td class="state-cell">{{ row.state | uppercase }}</td>
+                        <td>{{ row.candidateA | number }}</td>
+                        <td>{{ row.candidateB | number }}</td>
+                        <td>{{ row.candidateC | number }}</td>
+                        <td class="total-cell">{{ row.candidateA + row.candidateB + row.candidateC | number }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

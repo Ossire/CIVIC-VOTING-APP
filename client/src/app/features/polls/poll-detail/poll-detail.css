@@ -1,0 +1,119 @@
+.poll-detail-container {
+  max-width: 700px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.description {
+  color: #555;
+  line-height: 1.6;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+/* The Clickable Option Card */
+.option-card {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border: 2px solid #eaeaea;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option-card:hover {
+  border-color: #ccc;
+}
+
+/* The "Selected" State */
+.option-card.selected {
+  border-color: #2e7d32;
+  background-color: #f1f8f1;
+}
+
+/* Custom Radio Button Visual */
+.radio-circle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-card.selected .radio-circle {
+  border-color: #2e7d32;
+}
+
+.inner-circle {
+  width: 10px;
+  height: 10px;
+  background-color: #2e7d32;
+  border-radius: 50%;
+}
+
+.option-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 15px;
+  background: #1a1a1a;
+  color: white;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-submit:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.voted-notice {
+  text-align: center;
+  padding: 40px 20px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  border: 1px dashed #ccc;
+}
+
+.check-icon {
+  width: 60px;
+  height: 60px;
+  background: #2e7d32;
+  color: white;
+  font-size: 30px;
+  line-height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+}
+
+.btn-voted {
+  background: #555 !important; /* Makes it look different from "Action" buttons */
+}

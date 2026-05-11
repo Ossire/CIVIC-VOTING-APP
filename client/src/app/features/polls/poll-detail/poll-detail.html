@@ -1,0 +1,35 @@
+@if (poll(); as currentPoll) {
+<div class="poll-detail-container">
+    <button class="back-btn" (click)="goBack()">← Back to Polls</button>
+
+    <h2>{{ currentPoll.title }}</h2>
+
+    @if (currentPoll.userHasVoted) {
+    <!-- THE "ALREADY VOTED" STATE -->
+    <div class="voted-notice">
+        <div class="check-icon">✓</div>
+        <h3>You have already cast your vote for this poll.</h3>
+        <p>Thank you for participating! The final results will be available once the poll closes.</p>
+        <button class="btn-secondary" (click)="goBack()">View Other Polls</button>
+    </div>
+    } @else {
+    <!-- THE VOTING STATE -->
+    <p class="description">{{ currentPoll.description }}</p>
+
+    <div class="options-list">
+        @for (option of currentPoll.options; track option.id) {
+        <div class="option-card" [class.selected]="selectedOptionId() === option.id" (click)="selectOption(option.id)">
+            <div class="radio-circle">
+                @if (selectedOptionId() === option.id) { <div class="inner-circle"></div> }
+            </div>
+            <span class="option-text">{{ option.text }}</span>
+        </div>
+        }
+    </div>
+
+    <button class="btn-submit" [disabled]="!selectedOptionId() || isSubmitting()" (click)="submitVote()">
+        {{ isSubmitting() ? 'Submitting...' : 'Confirm Vote' }}
+    </button>
+    }
+</div>
+}

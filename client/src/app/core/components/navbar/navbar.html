@@ -1,0 +1,25 @@
+<nav class="navbar">
+    <div class="nav-brand">
+        <a routerLink="/pollist">VOTECHAIN</a>
+    </div>
+
+    <ul class="nav-links">
+        @if (authService.currentUser(); as user) {
+        <li><a routerLink="/pollist" routerLinkActive="active">Polls</a></li>
+        <li><a routerLink="/results" routerLinkActive="active">Results</a></li>
+
+        <li class="nav-user-profile">
+            <!-- Minimalist Initial Circle -->
+            <div class="avatar-nav" [routerLink]="['/profile']" title="View Profile">
+                {{ user.name[0] }}
+            </div>
+            <button (click)="onLogout()" class="btn-logout-minimal" title="Logout">
+                ✕
+            </button>
+        </li>
+        } @else {
+        <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
+        <li><a routerLink="/signup" routerLinkActive="active" class="btn-signup">Sign Up</a></li>
+        }
+    </ul>
+</nav>

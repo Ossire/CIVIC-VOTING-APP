@@ -1,0 +1,169 @@
+.profile-layout {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+/* Header Styling */
+.glass-header {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.avatar {
+  width: 70px;
+  height: 70px;
+  background: #fff;
+  color: #000;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 900;
+}
+.badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  opacity: 0.6;
+}
+.info h1 {
+  margin: 5px 0;
+  font-size: 1.8rem;
+}
+.info p {
+  margin: 0;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  background: #ff4d4d22;
+  border: 1px solid #ff4d4d44;
+  color: #ff4d4d;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.logout-btn:hover {
+  background: #ff4d4d;
+  color: #fff;
+}
+
+/* PAPER CARD STYLING */
+.label {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.paper-card {
+  display: flex;
+  background: #e0e0e0; /* Solid light grey for "Paper" */
+  color: #111; /* Dark text on light paper */
+  border-radius: 4px;
+  margin-bottom: 30px;
+  min-height: 180px;
+  box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.5); /* Hard shadow for depth */
+}
+
+.paper-body {
+  flex: 3;
+  padding: 25px 35px;
+}
+
+.paper-top {
+  display: flex;
+  justify-content: space-between;
+  font-family: monospace;
+  font-size: 0.75rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+.id-tag {
+  color: #4f46e5;
+  font-weight: 900;
+}
+.timestamp {
+  color: #666;
+  font-style: italic;
+}
+
+.poll-title {
+  font-family: serif;
+  font-size: 1.6rem;
+  margin: 0 0 15px 0;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.vote-box {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 12px 20px;
+  border-left: 5px solid #111;
+}
+.vote-box label {
+  font-size: 0.6rem;
+  font-weight: 900;
+  display: block;
+  margin-bottom: 5px;
+  opacity: 0.7;
+}
+.vote-box p {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+/* The Perforation (Dotted Lines) */
+.perforation {
+  width: 2px;
+  border-left: 3px dotted #999;
+  margin: 15px 0;
+}
+
+/* The Right Stub */
+.paper-stub {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.stamp {
+  border: 4px solid #111;
+  padding: 8px 15px;
+  font-family: monospace;
+  font-weight: 900;
+  font-size: 1rem;
+  transform: rotate(-15deg); /* Authentic stamp tilt */
+  text-align: center;
+}
+
+.red {
+  color: #cc0000;
+  border-color: #cc0000;
+}
+.green {
+  color: #008800;
+  border-color: #008800;
+}

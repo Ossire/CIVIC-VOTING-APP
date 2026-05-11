@@ -1,0 +1,55 @@
+.poll-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.poll-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+}
+
+.poll-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+/* Red and Green signals */
+.status-active {
+  color: #2e7d32;
+  background: #e8f5e9;
+}
+.status-closed {
+  color: #c62828;
+  background: #ffebee;
+}
+
+.btn-vote {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-vote:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

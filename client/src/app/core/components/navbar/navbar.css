@@ -1,0 +1,59 @@
+.navbar {
+  height: 70px; /* Fixed height to prevent "too big" feel */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8%;
+  background: rgba(10, 12, 16, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #30363d;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-brand a {
+  font-weight: 800;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-user-profile {
+  display: flex;
+  flex-direction: row; /* Forces side-by-side */
+  align-items: center;
+  gap: 15px;
+  padding-left: 20px;
+  border-left: 1px solid #333;
+}
+
+.avatar-nav {
+  width: 34px;
+  height: 34px;
+  background: white;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-logout-minimal {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+}

@@ -1,1 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+:root {
+  --bg-app: #0a0c10; /* Deep Cinematic Dark */
+  --surface-dark: #161b22; /* Sleek card background */
+  --primary: #4f46e5; /* Indigo accent */
+  --text-main: #f0f6fc;
+  --text-muted: #8b949e;
+  --paper-bg: #e6e6e6; /* Clean scanned paper color */
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+}
+
+/* Global Input Styling for Login/Signup */
+input,
+select {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+}

@@ -9,7 +9,7 @@
 
     <header class="results-header">
         <a [routerLink]="userRole() === 'admin' ? '/admin/dashboard' : '/polls'" class="back-link">
-            ← {{ userRole() === 'admin' ? 'ADMIN_CONSOLE' : 'RETURN_TO_FEED' }}
+            ← {{ userRole() === 'admin' ? 'ADMIN_PANEL' : 'RETURN_TO_FEED' }}
         </a>
 
         <section class="spotlight-card" [class.is-closed]="isClosed()"
@@ -38,7 +38,7 @@
 
                 @if (resultsData()?.totalVotes > 0) {
                 <div class="winner-stats">
-                    <span class="winner-pct">{{ winner()?.winnerPercentage }}%</span>
+                    got <span class="winner-pct">{{ winner()?.winnerPercentage }}%</span>
                     <span class="stat-label">of total votes cast on this poll</span>
                 </div>
                 }
@@ -89,7 +89,9 @@
                 </div>
 
                 <p class="turnout-label">
-                    {{ data.totalVotes }} out of the {{ totalEligibleUsers() }} total registered voters
+                    {{ data.totalVotes }} voted.... from the {{ totalEligibleUsers() }} eligible
+                    voters
+                    nationwide
                 </p>
 
                 <div class="state-drilldown">
@@ -110,8 +112,8 @@
                         {{ ((stats.votedInState / stats.totalInState) * 100).toFixed(1) }}%
                     </span>
                     <p class="state-footer">
-                        {{ stats.votedInState }} out of the {{ stats.totalInState }} registered voters in {{
-                        selectedFilterState() }}
+                        {{ stats.votedInState }} voted... from the {{ stats.totalInState }} eligible voters in {{
+                        selectedFilterState() }} state
                     </p>
                     } @else {
                     <p class="no-users-msg">no users registered in this state</p>

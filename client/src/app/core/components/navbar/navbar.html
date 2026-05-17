@@ -23,7 +23,7 @@
                 {{ (user()?.name?.charAt(0) | uppercase) || '?' }}
             </div>
             } @else {
-            <span class="admin-tag">YOU_ARE_NOW_ON_ADMIN_VIEW</span>
+
             }
             <button class="btn-logout-text" (click)="logout()">Logout</button>
         </div>

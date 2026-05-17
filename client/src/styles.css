@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   --bg-app: #0a0c10;
   --surface-dark: #161b22;
@@ -10,23 +18,81 @@
 }
 
 body {
-  margin: 0;
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-app);
   color: var(--text-main);
+  line-height: 1.5;
+  overflow-x: hidden;
 }
 
-Signup */ input,
-select {
+input,
+select,
+textarea {
   background: #0d1117;
   border: 1px solid #30363d;
   color: white;
   padding: 12px;
   border-radius: 8px;
   font-size: 0.9rem;
+  width: 100%;
+  max-width: 100%;
 }
 
-input:focus {
+input:focus,
+select:focus {
   outline: none;
   border-color: var(--primary);
+}
+
+main,
+.app-container,
+.admin-layout,
+.dashboard-wrapper,
+.content-area {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.admin-header,
+.action-bar,
+.button-row,
+.btn-group,
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 92%;
+  }
+
+  .admin-grid,
+  .dashboard-grid,
+  .two-column-layout {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 88%;
+  }
+
+  .btn-group button,
+  .action-bar a,
+  .action-bar button {
+    width: 100%;
+  }
 }

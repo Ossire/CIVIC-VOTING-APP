@@ -27,6 +27,7 @@
   font-size: 1.35rem;
   letter-spacing: -0.5px;
   cursor: pointer;
+  flex-shrink: 0;
 
   background: linear-gradient(to right, #a855f7 42%, #f8fafc 42%);
   -webkit-background-clip: text;
@@ -54,6 +55,7 @@
   border-radius: 12px;
   transition: all 0.3s ease;
   border: 1px solid transparent;
+  white-space: nowrap;
 }
 
 .nav-links a:hover {
@@ -63,9 +65,9 @@
 }
 
 .active-link {
-  background: rgba(168, 85, 247, 0.15) !important;
-  color: #c084fc !important;
-  border: 1px solid rgba(168, 85, 247, 0.4) !important;
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
   box-shadow:
     0 4px 15px rgba(168, 85, 247, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -90,6 +92,7 @@
   font-size: 1rem;
   box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
   border: 2px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
 }
 
 .admin-tag {
@@ -100,6 +103,8 @@
   padding: 6px 10px;
   border-radius: 8px;
   border: 1px solid rgba(239, 68, 68, 0.3);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .btn-logout-text {
@@ -112,10 +117,36 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .btn-logout-text:hover {
   background: rgba(239, 68, 68, 0.15);
   color: #ef4444;
   border-color: rgba(239, 68, 68, 0.4);
+}
+
+@media (max-width: 920px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+    padding: 1.25rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .user-control-group {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 }

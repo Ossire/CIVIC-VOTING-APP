@@ -1,64 +1,84 @@
 import { Routes } from '@angular/router';
-import { SignupComponent } from './features/signup/signup';
-import { LoginComponent } from './features/login/login';
-import { HomeComponent } from './features/home/home';
-import { PollListComponent } from './features/polls/poll-list/poll-list';
-import { PollDetailComponent } from './features/polls/poll-detail/poll-detail';
-import { ProfileComponent } from './features/profile/profile';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/roles.guard';
-import { PollResultsComponent } from './features/polls/poll-results/poll-results';
-import { CreatePollComponent } from './features/create-poll/create-poll';
-import { AdminDashboardComponent } from './features/admin-dashboard/admin-dashboard';
-import { MyVotesComponent } from './features/polls/my-votes/my-votes';
-import { ErrorPageComponent } from './features/error-page/error-page';
 import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [guestGuard] },
-  { path: 'signup', component: SignupComponent, canActivate: [guestGuard] },
-  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  {
+    path: '',
+    loadComponent: () => import('./features/home/home').then((m) => m.HomeComponent),
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'signup',
+    loadComponent: () => import('./features/signup/signup').then((m) => m.SignupComponent),
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/login/login').then((m) => m.LoginComponent),
+    canActivate: [guestGuard],
+  },
 
   {
+    path: 'profile',
+    loadComponent: () => import('./features/profile/profile').then((m) => m.ProfileComponent),
+    canActivate: [authGuard],
+  },
+  {
     path: 'polls',
-    component: PollListComponent,
+    loadComponent: () =>
+      import('./features/polls/poll-list/poll-list').then((m) => m.PollListComponent),
     canActivate: [authGuard, roleGuard],
     data: { expectedRole: 'user' },
   },
   {
     path: 'polls/:id',
-    component: PollDetailComponent,
+    loadComponent: () =>
+      import('./features/polls/poll-detail/poll-detail').then((m) => m.PollDetailComponent),
     canActivate: [authGuard, roleGuard],
     data: { expectedRole: 'user' },
   },
   {
     path: 'my-votes',
-    component: MyVotesComponent,
+    loadComponent: () =>
+      import('./features/polls/my-votes/my-votes').then((m) => m.MyVotesComponent),
     canActivate: [authGuard, roleGuard],
     data: { expectedRole: 'user' },
   },
 
-  { path: 'result/:id', component: PollResultsComponent, canActivate: [authGuard] },
+  {
+    path: 'result/:id',
+    loadComponent: () =>
+      import('./features/polls/poll-results/poll-results').then((m) => m.PollResultsComponent),
+    canActivate: [authGuard],
+  },
 
   {
     path: 'admin/dashboard',
-    component: AdminDashboardComponent,
+    loadComponent: () =>
+      import('./features/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboardComponent),
     canActivate: [authGuard, roleGuard],
     data: { expectedRole: 'admin' },
   },
   {
     path: 'admin/create-poll',
-    component: CreatePollComponent,
+    loadComponent: () =>
+      import('./features/create-poll/create-poll').then((m) => m.CreatePollComponent),
     canActivate: [authGuard, roleGuard],
     data: { expectedRole: 'admin' },
   },
   {
     path: 'admin/edit-poll/:id',
-    component: CreatePollComponent,
+    loadComponent: () =>
+      import('./features/create-poll/create-poll').then((m) => m.CreatePollComponent),
     canActivate: [authGuard, roleGuard],
     data: { expectedRole: 'admin' },
   },
 
-  { path: '**', component: ErrorPageComponent },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./features/error-page/error-page').then((m) => m.ErrorPageComponent),
+  },
 ];

@@ -1,119 +1,266 @@
-.poll-detail-container {
-  max-width: 700px;
-  margin: 0 auto;
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+.detail-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 20px;
 }
 
-.back-btn {
-  background: none;
+@media (max-width: 600px) {
+  .detail-container {
+    margin: 1rem auto;
+  }
+  .poll-detail-card {
+    padding: 25px !important;
+  }
+  .poll-detail-card h2 {
+    font-size: 1.6rem !important;
+  }
+  .voted-actions {
+    flex-direction: column;
+  }
+}
+
+.global-error-card {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-left: 5px solid #ef4444;
+  padding: 15px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 2rem;
+  color: #fca5a5;
+}
+
+.back-link-btn {
+  background: transparent;
   border: none;
-  color: #666;
+  color: #a855f7;
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
   cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: opacity 0.2s;
+}
+
+.back-link-btn:hover {
+  opacity: 0.7;
+}
+
+.poll-detail-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 32px;
+  padding: 40px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.poll-detail-card h2 {
+  color: #fff;
+  font-size: 2.2rem;
   margin-bottom: 20px;
-  font-size: 0.9rem;
+  font-weight: 900;
 }
 
 .description {
-  color: #555;
+  color: #94a3b8;
   line-height: 1.6;
-  margin-top: 10px;
   margin-bottom: 30px;
 }
 
-.options-list {
+.closed-stamp {
+  position: absolute;
+  top: 30px;
+  right: -40px;
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  padding: 8px 50px;
+  transform: rotate(35deg);
+  font-weight: 900;
+  font-size: 0.75rem;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  letter-spacing: 3px;
+  pointer-events: none;
+}
+
+.seal-tag {
+  font-family: 'Courier New', monospace;
+  color: #a855f7;
+  font-weight: 900;
+  letter-spacing: 5px;
+  background: rgba(168, 85, 247, 0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.options-grid {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
 }
 
-/* The Clickable Option Card */
-.option-card {
+.option-item {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
-  border: 2px solid #eaeaea;
-  border-radius: 8px;
+  gap: 15px;
+  padding: 18px 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.option-card:hover {
-  border-color: #ccc;
+.option-item:hover:not(.disabled) {
+  background: rgba(168, 85, 247, 0.08);
+  border-color: rgba(168, 85, 247, 0.3);
 }
 
-/* The "Selected" State */
-.option-card.selected {
-  border-color: #2e7d32;
-  background-color: #f1f8f1;
+.option-item.selected {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: #a855f7;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
 }
 
-/* Custom Radio Button Visual */
-.radio-circle {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ccc;
+.option-item.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.custom-radio {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  margin-right: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.option-card.selected .radio-circle {
-  border-color: #2e7d32;
-}
-
-.inner-circle {
+.radio-inner {
   width: 10px;
   height: 10px;
-  background-color: #2e7d32;
+  background: transparent;
   border-radius: 50%;
+  transition: all 0.2s;
 }
 
-.option-text {
-  font-size: 1.1rem;
-  font-weight: 500;
+.radio-inner.active {
+  background: #a855f7;
+  box-shadow: 0 0 10px #a855f7;
 }
 
-.btn-submit {
-  width: 100%;
-  padding: 15px;
-  background: #1a1a1a;
+.voted-notice-card {
+  text-align: center;
+  padding: 30px 10px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.success-state {
+  border-color: rgba(34, 197, 94, 0.2);
+}
+.locked-state {
+  border-color: rgba(168, 85, 247, 0.2);
+}
+
+.check-circle {
+  width: 65px;
+  height: 65px;
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border-radius: 50%;
+  line-height: 65px;
+  font-size: 2.2rem;
+  margin: 0 auto 20px;
+  border: 2px solid rgba(34, 197, 94, 0.3);
+}
+
+.btn-confirm-liquid,
+.btn-results-liquid {
+  background: linear-gradient(135deg, #a855f7, #6366f1);
   color: white;
-  font-size: 1.1rem;
   border: none;
-  border-radius: 8px;
+  padding: 16px 32px;
+  border-radius: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-confirm-liquid {
+  width: 100%;
+}
+
+.btn-results-liquid:hover,
+.btn-confirm-liquid:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+}
+
+.btn-secondary-liquid {
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.btn-submit:disabled {
-  background: #ccc;
-  cursor: not-allowed;
+.btn-secondary-liquid:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
-.voted-notice {
+.voted-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 35px;
+}
+
+.loader-overlay {
   text-align: center;
-  padding: 40px 20px;
-  background: #f9f9f9;
-  border-radius: 12px;
-  border: 1px dashed #ccc;
+  padding: 4rem;
+  color: #a855f7;
+  font-family: 'Courier New', monospace;
 }
 
-.check-icon {
-  width: 60px;
-  height: 60px;
-  background: #2e7d32;
-  color: white;
-  font-size: 30px;
-  line-height: 60px;
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(168, 85, 247, 0.1);
+  border-top-color: #a855f7;
   border-radius: 50%;
-  margin: 0 auto 20px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
 }
 
-.btn-voted {
-  background: #555 !important; /* Makes it look different from "Action" buttons */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

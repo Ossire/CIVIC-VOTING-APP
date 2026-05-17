@@ -2,6 +2,6 @@
 **/dist/
 **/.angular/
 .env
-api/.env
+voting-api/.env
 client/.env
 .vscode/

@@ -1,28 +1,45 @@
 <div class="auth-container">
-    <h2>Welcome Back</h2>
-    <p>Log in to cast your vote.</p>
+    <div class="glass-form animate-in">
+        @if (errorService.errorMessage()) {
+        <div class="global-error-card">
+            <span class="error-icon">⚠️</span>
+            <p>{{ errorService.errorMessage() }}</p>
+            <button (click)="errorService.clearError()" class="close-error">✕</button>
+        </div>
+        }
 
-    @if (errorMessage()) {
-    <div class="error-banner">
-        {{ errorMessage() }}
+        <header class="auth-header">
+            <span class="system-tag">Votta makes your voice heard..</span>
+            <h1>Welcome Back</h1>
+
+        </header>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="field-group"
+                [class.error-field]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                <label>Email</label>
+                <input type="email" formControlName="email" placeholder="name@domain.com">
+                @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+                <span class="field-error">Please enter a valid email.</span>
+                }
+            </div>
+
+            <div class="field-group"
+                [class.error-field]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                <label>Password</label>
+                <input type="password" formControlName="password" placeholder="••••••••">
+                @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+                <span class="field-error">Password must be at least 6 characters.</span>
+                }
+            </div>
+
+            <button type="submit" class="btn-primary-liquid" [disabled]="loginForm.invalid || isLoading()">
+                {{ isLoading() ? 'AUTHENTICATING...' : 'LOGIN' }}
+            </button>
+
+            <div class="auth-footer">
+                <p>Dont have an account? <a routerLink="/signup">Register here</a></p>
+            </div>
+        </form>
     </div>
-    }
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input id="email" type="email" formControlName="email" placeholder="Enter your email">
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input id="password" type="password" formControlName="password" placeholder="Enter your password">
-        </div>
-
-        <button type="submit" [disabled]="loginForm.invalid || isLoading()">
-            {{ isLoading() ? 'Verifying...' : 'Login' }}
-        </button>
-    </form>
-
-    <p>Don't have an account? <a routerLink="/signup">Sign up here</a></p>
 </div>

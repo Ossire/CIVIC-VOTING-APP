@@ -3,22 +3,35 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 80vh; /* Takes up most of the screen */
+  height: 80vh;
   text-align: center;
   padding: 0 20px;
+  position: relative;
+
+  background:
+    radial-gradient(circle at 15% 20%, rgba(168, 85, 247, 0.07) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
 }
 
-.hero-section h1 {
+.brand-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
   font-size: 3.5rem;
+  color: #ffffff;
   margin-bottom: 1rem;
-  color: #1a1a1a;
+  letter-spacing: -1px;
+}
+
+.purple-pt {
+  color: #a855f7;
 }
 
 .hero-section p {
   font-size: 1.25rem;
-  color: #666;
+  color: #94a3b8;
   max-width: 600px;
   margin-bottom: 2.5rem;
+  line-height: 1.6;
 }
 
 .hero-actions {
@@ -26,30 +39,51 @@
   gap: 20px;
 }
 
-.btn-primary {
-  background-color: #1a1a1a;
-  color: white;
-  padding: 15px 30px;
+.glass-liquid {
+  padding: 15px 32px;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
-  transition: transform 0.2s;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(168, 85, 247, 0.08) 100%);
+  color: #ffffff;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.15);
 }
 
 .btn-secondary {
-  background-color: transparent;
-  color: #1a1a1a;
-  padding: 15px 30px;
-  text-decoration: none;
-  border: 2px solid #1a1a1a;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: background 0.2s;
+  background: rgba(255, 255, 255, 0.02);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.35) 0%, rgba(168, 85, 247, 0.12) 100%);
+  border-color: rgba(168, 85, 247, 0.55);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(168, 85, 247, 0.3);
 }
+
 .btn-secondary:hover {
-  background: #f0f0f0;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(255, 255, 255, 0.05);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+  transform: translateY(0);
 }

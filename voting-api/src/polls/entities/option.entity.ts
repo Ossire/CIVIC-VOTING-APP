@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
@@ -21,4 +22,7 @@ export class Option {
 
   @OneToMany(() => Vote, (vote) => vote.choice)
   votes: Vote[];
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

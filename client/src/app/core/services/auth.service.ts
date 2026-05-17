@@ -1,55 +1,85 @@
-import { Injectable, signal } from '@angular/core';
-import { of, delay, tap } from 'rxjs';
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  state: string;
-}
+import { Injectable, signal, inject, computed } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { AuthResponse, User } from '../models/auth.model';
+import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // We initialize this as null, but our login method will fill it
+  router = inject(Router);
+  private http = inject(HttpClient);
+  private readonly AUTH_URL = `${environment.apiUrl}/auth`;
+
   currentUser = signal<User | null>(null);
+  isLoggedIn = computed(() => !!this.currentUser());
+  constructor() {
+    this.rehydrateUser();
+  }
+  private rehydrateUser() {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
 
-  login(credentials: any) {
-    // We are mocking a backend response here
-    const mockUser: User = {
-      id: '123',
-      name: 'John Doe',
-      email: credentials.email || 'john@example.com',
-      state: 'Lagos', // This is the state that will show on your Voter Cards
-    };
+        const currentTime = Date.now() / 1000;
+        if (decoded.exp < currentTime) {
+          this.logout();
+          return;
+        }
 
-    // We use 'of' to return an Observable, simulating a real HTTP call
-    return of({ user: mockUser }).pipe(
-      delay(800), // Simulate a short network lag
-      tap((res) => {
-        this.currentUser.set(res.user);
-        console.log('User logged in successfully (Mock)');
-      }),
-    );
+        this.currentUser.set({
+          id: decoded.sub,
+          email: decoded.email,
+          name: decoded.name,
+          role: decoded.role,
+          state: decoded.state,
+        });
+
+        console.log(this.currentUser());
+      } catch (e) {
+        this.logout();
+      }
+    }
+  }
+  signup(signupData: any) {
+    return this.http
+      .post<AuthResponse>(`${this.AUTH_URL}/signup`, signupData)
+      .pipe(tap((res) => this.setSession(res)));
   }
 
-  signup(userData: any) {
-    // Same for signup - just fake a success for now
-    const mockUser: User = {
-      id: '124',
-      name: userData.name,
-      email: userData.email,
-      state: userData.state,
-    };
+  login(credentials: { email: string; password: any }) {
+    return this.http
+      .post<AuthResponse>(`${this.AUTH_URL}/login`, credentials)
+      .pipe(tap((res) => this.setSession(res)));
+  }
 
-    return of({ user: mockUser }).pipe(
-      delay(800),
-      tap((res) => this.currentUser.set(res.user)),
-    );
+  private setSession(authResult: AuthResponse) {
+    localStorage.setItem('access_token', authResult.access_token);
+    try {
+      const decoded: any = jwtDecode(authResult.access_token);
+
+      const user: User = {
+        id: decoded.sub,
+        email: decoded.email,
+        role: decoded.role,
+        name: decoded.name,
+        state: decoded.state,
+      };
+
+      this.currentUser.set(user);
+    } catch (error) {
+      console.error('Invalid token format', error);
+      this.logout();
+    }
   }
 
   logout() {
+    localStorage.removeItem('access_token');
     this.currentUser.set(null);
+    this.router.navigate(['/login']);
   }
 }

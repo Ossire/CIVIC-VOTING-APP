@@ -1,0 +1,87 @@
+<div class="history-container">
+    @if (errorService.errorMessage()) {
+    <div class="global-error-card animate-in">
+        <span class="error-icon">⚠️</span>
+        <p>{{ errorService.errorMessage() }}</p>
+        <button (click)="errorService.clearError()" class="close-error">✕</button>
+    </div>
+    }
+
+    <header class="history-header">
+        <span class="system-tag">VOTING_ARCHIVE</span>
+        <h1 class="brand-title"><span class="purple-pt">VO</span>TES</h1>
+    </header>
+
+    @if (isLoading()) {
+    <div class="loader">
+        <div class="spinner"></div>
+    </div>
+    }
+
+    <div class="history-list">
+        @for (item of history(); track item.id) {
+        <div class="history-card glass-liquid" [class.expanded]="expandedPollId() === item.id"
+            (click)="toggleExpand(item.id)">
+            <!-- ... your existing card content ... -->
+            <div class="card-top-content">
+                <div class="info-block">
+                    <h3>{{ item.title }}</h3>
+                    <span class="voted-on">TIMESTAMP: {{ item.votedAt | date:'MMM d, yyyy' }}</span>
+                </div>
+
+                <div class="badges-block">
+                    <span class="status-chip" [class.active]="item.status === 'Active'">{{ item.status }}</span>
+                    <span class="winner-badge" [class.pending]="item.winner === 'Pending'">
+                        {{ item.winner === 'Pending' ? 'WINNER: PENDING' : 'WINNER: ' + item.winner }}
+                    </span>
+                </div>
+            </div>
+
+            @if (expandedPollId() === item.id) {
+            <div class="card-details animate-in" (click)="$event.stopPropagation()">
+                <div class="choice-highlight">
+                    <span class="label">YOUR_SELECTION:</span>
+                    <span class="val">{{ item.userChoice }}</span>
+                </div>
+
+                <div class="results-breakdown">
+                    @for (opt of item.results; track $index) {
+                    <div class="result-bar-item">
+                        <div class="bar-labels">
+                            <span class="opt-text">{{ opt.text }} <span class="spacer">---</span> ({{ opt.percentage
+                                }}%)</span>
+                        </div>
+                        <div class="bar-bg">
+                            <div class="bar-fill" [style.width]="opt.percentage + '%'"></div>
+                        </div>
+                    </div>
+                    }
+                </div>
+                <div class="total-footer">TALLY_COUNT: {{ item.totalVotes }}</div>
+            </div>
+            }
+
+            <div class="card-toggle-footer">
+                <span class="toggle-text">
+                    {{ expandedPollId() === item.id ? 'CLOSE' : 'EXPAND' }}
+                </span>
+                <svg class="chevron-icon" [class.rotated]="expandedPollId() === item.id" width="18" height="18"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </div>
+        </div>
+        } @empty {
+        @if (!isLoading() && !errorService.errorMessage()) {
+        <div class="empty-state-card animate-in">
+            <div class="empty-icon">📂</div>
+            <h2>No Voting History</h2>
+            <p>You have no voting history cos you havent voted on any polls yet... vote on any poll and come back here..
+            </p>
+            <button routerLink="/polls" class="btn-primary-liquid">Go to Polls</button>
+        </div>
+        }
+        }
+    </div>
+</div>

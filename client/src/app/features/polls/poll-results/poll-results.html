@@ -1,63 +1,127 @@
 <div class="results-container">
+    @if (errorService.errorMessage()) {
+    <div class="global-error-card animate-in">
+        <span class="error-icon">⚠️</span>
+        <p>{{ errorService.errorMessage() }}</p>
+        <button (click)="errorService.clearError()" class="close-error">✕</button>
+    </div>
+    }
+
     <header class="results-header">
-        <div class="header-main">
-            <span class="live-tag">LIVE ARCHIVE</span>
-            <h1>{{ pollTitle() }}</h1>
-            <p class="stats">TOTAL VERIFIED ENTRIES: <strong>{{ totalVotes() | number }}</strong></p>
-        </div>
-        <div class="leader-card">
-            <span class="label">CURRENT LEADER</span>
-            <span class="name">ALEX JOHNSON</span>
-            <span class="percentage">46.7%</span>
-        </div>
+        <a [routerLink]="userRole() === 'admin' ? '/admin/dashboard' : '/polls'" class="back-link">
+            ← {{ userRole() === 'admin' ? 'ADMIN_CONSOLE' : 'RETURN_TO_FEED' }}
+        </a>
+
+        <section class="spotlight-card" [class.is-closed]="isClosed()"
+            [class.no-votes]="resultsData()?.totalVotes === 0">
+            @if (isClosed()) {
+            @if (resultsData()?.totalVotes === 0) {
+            <div class="red-seal">ZERO PARTICIPATION</div>
+            } @else {
+            <div class="gold-seal">SEALED</div>
+            }
+            }
+
+            <div class="spotlight-content">
+                @if (resultsData()?.totalVotes === 0) {
+                <span class="spotlight-label text-red">VACANT_LEDGER</span>
+                <h2 class="winner-name">
+                    {{ isClosed() ? 'No one voted on this poll before it closed' : 'This poll has no votes yet...' }}
+                </h2>
+                } @else if (winner()?.isTie) {
+                <span class="spotlight-label text-amber">STALEMATE_DETECTED</span>
+                <h2 class="winner-name">TIE: {{ winner()?.text }}</h2>
+                } @else {
+                <span class="spotlight-label">{{ isClosed() ? 'WINNER' : 'CURRENT_LEADER' }}</span>
+                <h2 class="winner-name">{{ winner()?.text }}</h2>
+                }
+
+                @if (resultsData()?.totalVotes > 0) {
+                <div class="winner-stats">
+                    <span class="winner-pct">{{ winner()?.winnerPercentage }}%</span>
+                    <span class="stat-label">of total votes cast on this poll</span>
+                </div>
+                }
+            </div>
+        </section>
+
+        @if (resultsData(); as data) {
+        <h3 class="faint-results-title">Results for poll: {{ data.pollTitle }}</h3>
+        }
     </header>
 
-    <section class="dashboard-grid">
-        <div class="chart-card">
-            <h3>OVERALL STANDINGS</h3>
-            <div class="canvas-container">
-                <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType">
-                </canvas>
-            </div>
-        </div>
+    @if (isLoading()) {
+    <div class="loader-overlay">
+        <div class="spinner"></div>
+        <p>SYNCHRONIZING_TALLY...</p>
+    </div>
+    }
 
-        <div class="quick-stats">
-            <div class="stat-box">
-                <span class="stat-label">Margin of Lead</span>
-                <span class="stat-value">+300 Votes</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-label">Reporting States</span>
-                <span class="stat-value">36/36</span>
-            </div>
-        </div>
-    </section>
+    @if (!isLoading() && resultsData(); as data) {
+    <div class="results-layout animate-in">
+        <div class="analytics-grid">
 
-    <section class="analysis-section">
-        <h3 class="section-title">REGIONAL DATA LOG (STATE-BY-STATE)</h3>
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>STATE</th>
-                        <th>ALEX JOHNSON</th>
-                        <th>SARAH WILLIAMS</th>
-                        <th>MICHAEL CHEN</th>
-                        <th>TOTAL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (row of stateBreakdown(); track row.state) {
-                    <tr>
-                        <td class="state-cell">{{ row.state | uppercase }}</td>
-                        <td>{{ row.candidateA | number }}</td>
-                        <td>{{ row.candidateB | number }}</td>
-                        <td>{{ row.candidateC | number }}</td>
-                        <td class="total-cell">{{ row.candidateA + row.candidateB + row.candidateC | number }}</td>
-                    </tr>
+            <div class="chart-card glass-liquid">
+                <!-- <div class="card-header">
+                    <h3>VOTE_DATA</h3>
+                    <div class="total-voters">
+                        <span class="val">{{ data.totalVotes | number }}</span>
+                        <span class="label"></span>
+                    </div>
+                </div> -->
+                <div class="canvas-container shimmer-bg">
+                    <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType"></canvas>
+                </div>
+                <div class="faint-verified-ballots">
+                    {{ data.totalVotes | number }} VERIFIED_BALLOTS FOUND
+                </div>
+            </div>
+
+            <div class="participation-card glass-liquid">
+                <h3>VOTES FROM ALL STATES</h3>
+
+                <div class="doughnut-wrapper">
+                    <div class="css-doughnut" [style.--percent]="participationPct()">
+                        <div class="inner-circle">
+                            <span class="pct-val">{{ participationPct() }}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="turnout-label">
+                    {{ data.totalVotes }} out of the {{ totalEligibleUsers() }} total registered voters
+                </p>
+
+                <div class="state-drilldown">
+                    <label class="drill-label">Filter results by state:</label>
+                    <select [(ngModel)]="selectedFilterState" (change)="onStateFilterChange()"
+                        class="state-select-mini">
+                        <option value="">Select State...</option>
+                        @for (state of nigerianStates; track state) {
+                        <option [value]="state">{{ state }}</option>
+                        }
+                    </select>
+                </div>
+
+                @if (stateStats(); as stats) {
+                <div class="state-result-box animate-in">
+                    @if (stats.totalInState > 0) {
+                    <span class="state-pct-lead">
+                        {{ ((stats.votedInState / stats.totalInState) * 100).toFixed(1) }}%
+                    </span>
+                    <p class="state-footer">
+                        {{ stats.votedInState }} out of the {{ stats.totalInState }} registered voters in {{
+                        selectedFilterState() }}
+                    </p>
+                    } @else {
+                    <p class="no-users-msg">no users registered in this state</p>
                     }
-                </tbody>
-            </table>
+                </div>
+                }
+            </div>
         </div>
-    </section>
+
+
+    </div>
+    }
 </div>

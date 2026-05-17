@@ -18,6 +18,10 @@ export class CreatePollDto {
   @IsNotEmpty()
   title: string;
 
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
   @IsArray()
   @ArrayMinSize(2)
   @ValidateNested({ each: true })

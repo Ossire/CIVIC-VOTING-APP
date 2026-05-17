@@ -1,35 +1,117 @@
-@if (poll(); as currentPoll) {
-<div class="poll-detail-container">
-    <button class="back-btn" (click)="goBack()">← Back to Polls</button>
+<div class="detail-container">
 
-    <h2>{{ currentPoll.title }}</h2>
-
-    @if (currentPoll.userHasVoted) {
-    <!-- THE "ALREADY VOTED" STATE -->
-    <div class="voted-notice">
-        <div class="check-icon">✓</div>
-        <h3>You have already cast your vote for this poll.</h3>
-        <p>Thank you for participating! The final results will be available once the poll closes.</p>
-        <button class="btn-secondary" (click)="goBack()">View Other Polls</button>
+    @if (errorService.errorMessage()) {
+    <div class="global-error-card animate-in">
+        <span class="error-icon">⚠️</span>
+        <p>{{ errorService.errorMessage() }}</p>
+        <button (click)="errorService.clearError()" class="close-error">✕</button>
     </div>
-    } @else {
-    <!-- THE VOTING STATE -->
-    <p class="description">{{ currentPoll.description }}</p>
+    }
 
-    <div class="options-list">
-        @for (option of currentPoll.options; track option.id) {
-        <div class="option-card" [class.selected]="selectedOptionId() === option.id" (click)="selectOption(option.id)">
-            <div class="radio-circle">
-                @if (selectedOptionId() === option.id) { <div class="inner-circle"></div> }
-            </div>
-            <span class="option-text">{{ option.text }}</span>
-        </div>
+    <header class="detail-header">
+        <button class="back-link-btn" (click)="goBack()">← BACK_TO_POLLS</button>
+    </header>
+
+    @if (isLoading()) {
+    <div class="loader-overlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+    }
+
+    @if (poll(); as currentPoll) {
+    <div class="poll-detail-card glass-liquid animate-in" [class.is-closed]="isClosed()">
+
+
+        @if (isClosed()) {
+        <div class="closed-stamp">POLL CLOSED</div>
         }
-    </div>
 
-    <button class="btn-submit" [disabled]="!selectedOptionId() || isSubmitting()" (click)="submitVote()">
-        {{ isSubmitting() ? 'Submitting...' : 'Confirm Vote' }}
-    </button>
+        <div class="card-content">
+            <h2>{{ currentPoll.title }}</h2>
+
+
+            @if (justVoted()) {
+            <div class="voted-notice-card success-state">
+                <div class="success-icon-wrap">
+                    <div class="check-circle">✓</div>
+                </div>
+                <h3>VOTE CONFIRMED</h3>
+                <p>Thank you for participating! Your voice has been heard.</p>
+
+                <div class="voted-actions">
+                    <button class="btn-results-liquid" [routerLink]="['/result', currentPoll.id]">
+                        VIEW RESULTS
+                    </button>
+                    <button class="btn-secondary-liquid" (click)="goBack()">
+                        OTHER POLLS
+                    </button>
+                </div>
+            </div>
+            }
+
+
+            @else if (userHasVoted()) {
+            <div class="voted-notice-card locked-state">
+                <div class="lock-icon-wrap">
+                    <span class="seal-tag">POLL_LOCKED</span>
+                </div>
+
+                <p>You have already submitted your vote for this poll.</p>
+
+                <div class="voted-actions">
+                    <button class="btn-results-liquid" [routerLink]="['/result', currentPoll.id]">
+                        CHECK_LIVE_RESULTS
+                    </button>
+                    <button class="btn-secondary-liquid" (click)="goBack()">
+                        RETURN_TO_POLLS
+                    </button>
+                </div>
+            </div>
+            }
+
+
+            @else if (isClosed()) {
+            <div class="voted-notice-card locked-state">
+                <div class="lock-icon-wrap">
+                    <span class="seal-tag">POLL_EXPIRED</span>
+                </div>
+
+                <p>This poll closed before you could vote on it.</p>
+
+                <div class="voted-actions">
+                    <button class="btn-results-liquid" [routerLink]="['/result', currentPoll.id]">
+                        VIEW RESULTS
+                    </button>
+                    <button class="btn-secondary-liquid" (click)="goBack()">
+                        RETURN_TO_POLLS
+                    </button>
+                </div>
+            </div>
+            }
+
+
+            @else {
+            <p class="description">{{ currentPoll.description }}</p>
+
+            <div class="options-grid">
+                @for (option of currentPoll.options; track option.id) {
+                <div class="option-item" [class.selected]="selectedOptionId() === option.id"
+                    (click)="selectOption(option.id)">
+                    <div class="custom-radio">
+                        <div class="radio-inner" [class.active]="selectedOptionId() === option.id"></div>
+                    </div>
+                    <span class="option-label">{{ option.text }}</span>
+                </div>
+                }
+            </div>
+
+            <button class="btn-confirm-liquid" [disabled]="!selectedOptionId() || isSubmitting()"
+                (click)="onCastVote()">
+                {{ isSubmitting() ? 'SUBMITTING VOTE...' : 'VOTE' }}
+            </button>
+            }
+        </div>
+    </div>
     }
 </div>
-}

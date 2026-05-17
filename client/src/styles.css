@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
 :root {
-  --bg-app: #0a0c10; /* Deep Cinematic Dark */
-  --surface-dark: #161b22; /* Sleek card background */
-  --primary: #4f46e5; /* Indigo accent */
+  --bg-app: #0a0c10;
+  --surface-dark: #161b22;
+  --primary: #4f46e5;
   --text-main: #f0f6fc;
   --text-muted: #8b949e;
-  --paper-bg: #e6e6e6; /* Clean scanned paper color */
+  --paper-bg: #e6e6e6;
 }
 
 body {
@@ -16,8 +16,7 @@ body {
   color: var(--text-main);
 }
 
-/* Global Input Styling for Login/Signup */
-input,
+Signup */ input,
 select {
   background: #0d1117;
   border: 1px solid #30363d;

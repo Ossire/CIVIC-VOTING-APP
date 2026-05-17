@@ -1,0 +1,138 @@
+<div class="admin-container">
+    @if (errorService.errorMessage()) {
+    <div class="global-error-card animate-in">
+        <span class="error-icon">⚠️</span>
+        <p>{{ errorService.errorMessage() }}</p>
+        <button (click)="errorService.clearError()" class="close-error">✕</button>
+    </div>
+    }
+
+    <header class="admin-header">
+        <div class="title-area">
+            <span class="system-tag">SYSTEM CENTER</span>
+            <h1>Poll Management</h1>
+        </div>
+        <button class="btn-create" routerLink="/admin/create-poll">+ Create New Poll</button>
+    </header>
+
+    <div class="stats-grid">
+
+        <div class="stat-card glass-liquid split-card">
+            <div class="main-info">
+                <span class="label">Total Polls</span>
+                <span class="value green-value">{{ totalPollsCount() }}</span>
+            </div>
+            <div class="side-stack">
+                <div class="stack-item">
+                    <span class="sub-val accent">{{ activePollsCount() }}</span>
+                    <span class="sub-label">ACTIVE</span>
+                </div>
+                <div class="stack-item">
+                    <span class="sub-val red">{{ closedPollsCount() }}</span>
+                    <span class="sub-label">CLOSED</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="stat-card glass-liquid">
+            <span class="label">Total Votes Cast</span>
+            <span class="value">{{ totalVotesCast() | number }}</span>
+        </div>
+
+
+        <div class="stat-card glass-liquid">
+            <span class="label">Registered Voters</span>
+            <span class="value accent">{{ totalRegisteredVoters() | number }}</span>
+        </div>
+
+        <div class="stat-card glass-liquid filter-card">
+            <span class="label">Registration by State</span>
+            <div class="filter-row">
+                <select [(ngModel)]="selectedState" class="state-select">
+                    <option value="" disabled selected>State...</option>
+                    @for (state of nigerianStates; track state) {
+                    <option [value]="state">{{ state }}</option>
+                    }
+                </select>
+                <button (click)="onFilterState()" class="btn-filter">FILTER</button>
+            </div>
+
+            @if (stateFilterResult(); as res) {
+            <div class="filter-display animate-in">
+                <div class="mini-doughnut" [style.--percent]="res.pct">
+                    <div class="inner">{{ res.pct }}%</div>
+                </div>
+                <div class="result-text">
+                    <span class="pct-detail">{{ res.pct }}% coverage</span>
+                    <span class="raw-detail">{{ res.count }} of {{ totalRegisteredVoters() }}</span>
+                </div>
+            </div>
+            } @else {
+            <p class="filter-placeholder">Select state to visualize</p>
+            }
+        </div>
+    </div>
+
+    <div class="table-card glass-effect animate-in">
+        @if (isLoading()) {
+        <div class="loading-overlay">
+            <div class="spinner"></div>
+            <span>Loading System Records...</span>
+        </div>
+        }
+
+        <table>
+            <thead>
+                <tr>
+                    <th>POLL_TITLE</th>
+                    <th>STATUS_CONTROL</th>
+                    <th>VOTES_CAST</th>
+                    <th>END_DATE</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (poll of polls(); track poll.id) {
+                <tr>
+                    <td class="poll-name">
+                        {{ poll.title }}
+                        <small>ID: {{ poll.id.substring(0,8) }}</small>
+                    </td>
+                    <td>
+                        <div class="status-control-wrap">
+                            <span class="status-chip" [class.active]="poll.status === 'Active'"
+                                [class.closed]="poll.status === 'Closed'">
+                                {{ poll.status }}
+                            </span>
+                            <label class="switch"
+                                [title]="poll.status === 'Closed' ? 'Cannot reactivate closed polls' : 'Manually close poll'">
+                                <input type="checkbox" [checked]="poll.status === 'Active'"
+                                    (change)="onToggleStatus(poll)" [disabled]="poll.status === 'Closed'">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </td>
+                    <td class="numeric">{{ (poll.voteCount || 0) | number }}</td>
+                    <td>{{ poll.endsAt | date:'mediumDate' }}</td>
+                    <td>
+                        <div class="actions-wrapper">
+                            <button class="btn-icon view" title="View Results"
+                                [routerLink]="['/result', poll.id]">📊</button>
+
+
+                            <button class="btn-icon edit"
+                                [attr.title]="poll.status === 'Closed' ? 'Cannot edit closed polls' : (poll.voteCount! > 0 ? 'Cannot edit active poll with votes' : 'Edit Poll')"
+                                (click)="onEdit(poll)"
+                                [disabled]="poll.status === 'Closed' || (poll.voteCount || 0) > 0"
+                                [class.locked]="poll.status === 'Closed' || (poll.voteCount || 0) > 0">✏️</button>
+
+                            <button class="btn-icon delete" title="Delete Poll" (click)="onDelete(poll.id)">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

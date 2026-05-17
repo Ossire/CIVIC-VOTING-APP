@@ -1,63 +1,91 @@
-import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, signal, OnInit } from '@angular/core';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { ErrorService } from '../../core/services/error.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-signup',
+  selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  public errorService = inject(ErrorService);
 
-  errorMessage = signal<string | null>(null);
-  isLoading = signal<boolean>(false);
+  isLoading = signal(false);
 
-  // The list of states for the dropdown
-  states = [
-    'Lagos',
+  nigerianStates: string[] = [
+    'Abia',
     'Abuja',
-    'Rivers',
-    'Kano',
-    'Ogun',
+    'Adamawa',
+    'Akwa Ibom',
     'Anambra',
-    'Enugu',
-    'Edo',
+    'Bauchi',
+    'Bayelsa',
+    'Benue',
+    'Borno',
+    'Cross River',
     'Delta',
+    'Ebonyi',
+    'Edo',
+    'Ekiti',
+    'Enugu',
+    'Gombe',
+    'Imo',
+    'Jigawa',
     'Kaduna',
+    'Kano',
+    'Katsina',
+    'Kebbi',
+    'Kogi',
+    'Kwara',
+    'Lagos',
+    'Nasarawa',
+    'Niger',
+    'Ogun',
+    'Ondo',
+    'Osun',
+    'Oyo',
+    'Plateau',
+    'Rivers',
+    'Sokoto',
+    'Taraba',
+    'Yobe',
+    'Zamfara',
   ];
 
-  signupForm = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
+  registerForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     state: ['', [Validators.required]],
   });
 
+  ngOnInit() {
+    this.errorService.clearError();
+  }
+
   onSubmit() {
-    if (this.signupForm.invalid) {
-      this.signupForm.markAllAsTouched();
-      return;
-    }
+    if (this.registerForm.invalid) return;
 
     this.isLoading.set(true);
-    this.errorMessage.set(null);
+    this.errorService.clearError();
 
-    // Changed .register() to .signup() to match the AuthService
-    this.authService.signup(this.signupForm.getRawValue()).subscribe({
+    this.authService.signup(this.registerForm.getRawValue()).subscribe({
       next: () => {
         this.isLoading.set(false);
-        // Navigate to the poll list after successful mock signup
+        alert('Congratulations Registration Succesful. Click ok to proceed!');
         this.router.navigate(['/polls']);
       },
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.message || 'An error occurred during signup');
+        this.errorService.handleError(err);
       },
     });
   }

@@ -1,26 +1,54 @@
-<div class="poll-grid">
-    @for (poll of polls(); track poll.id) {
-    @let status = getPollStatus(poll.endsAt);
-
-    <div class="poll-card">
-        <div class="poll-header">
-            <span class="status-indicator" [ngClass]="status.cssClass">
-                <i class="clock-icon">🕒</i> {{ status.label }}
-            </span>
-            <span class="vote-count">{{ poll.totalVotes }} votes</span>
-        </div>
-
-        <h3>{{ poll.title }}</h3>
-
-        <button [disabled]="!status.active" (click)="goToPoll(poll.id)" [class.btn-voted]="poll.userHasVoted"
-            class="btn-vote">
-
-            @if (poll.userHasVoted) {
-            View Your Selection
-            } @else {
-            {{ status.active ? 'Cast Your Vote' : 'View Results' }}
-            }
-        </button>
+<div class="polls-container">
+    @if (errorService.errorMessage()) {
+    <div class="global-error-card animate-in">
+        <span class="error-icon">⚠️</span>
+        <p>{{ errorService.errorMessage() }}</p>
+        <button (click)="errorService.clearError()" class="close-error">✕</button>
     </div>
     }
+    <header class="polls-header">
+        <span class="system-tag"></span>
+        <!-- First two letters purple, rest white -->
+        <h1 class="brand-title"><span class="purple-pt">PO</span>LLS</h1>
+    </header>
+
+    <div class="polls-grid">
+        @for (poll of polls(); track poll.id) {
+        <div class="poll-card animate-in" [class.voted]="poll.userHasVoted" [routerLink]="['/polls', poll.id]">
+
+            <!-- Diagonal Voted Stamp -->
+            @if (poll.userHasVoted) {
+            <div class="voted-stamp">YOU VOTED</div>
+            }
+
+            <div class="card-top">
+                <span class="status-badge" [class.closed]="poll.status === 'Closed'">
+                    {{ poll.status }}
+                </span>
+            </div>
+
+            <div class="card-body">
+                <h3>{{ poll.title }}</h3>
+                <p>{{ poll.description }}</p>
+            </div>
+
+            <div class="card-footer">
+                <div class="vote-stat">
+                    <span class="label">Voters</span>
+                    <span class="count">{{ (poll.voteCount || 0) | number }}</span>
+                </div>
+
+
+                <div class="closing-info">
+
+                    <span class="label"> {{poll.status === 'Closed'? 'Ended' : 'Closing'}}</span>
+                    <!-- Format: May 13 / 2026 -- 10:45 PM -->
+                    <span class="date">{{ poll.endsAt | date:'MMM d / yyyy -- h:mm a' }}</span>
+                </div>
+
+
+            </div>
+        </div>
+        }
+    </div>
 </div>

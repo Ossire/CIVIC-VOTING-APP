@@ -8,5 +8,11 @@ export interface User {
 
 export interface AuthResponse {
   access_token: string;
-  user: User;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: 'admin' | 'user';
+    state: string;
+  };
 }

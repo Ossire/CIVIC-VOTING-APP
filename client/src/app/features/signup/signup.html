@@ -1,44 +1,71 @@
-<div class="auth-wrapper">
-    <div class="auth-card">
-        <div class="auth-header">
-            <h2>Create Account</h2>
-            <p>Enter your details to join the network</p>
+<div class="auth-container">
+    <div class="glass-form animate-in">
+        @if (errorService.errorMessage()) {
+        <div class="global-error-card">
+            <span class="error-icon">⚠️</span>
+            <p>{{ errorService.errorMessage() }}</p>
+            <button (click)="errorService.clearError()" class="close-error">✕</button>
         </div>
+        }
 
-        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" formControlName="name" placeholder="John Doe">
-                </div>
-                <div class="form-group">
-                    <label>State</label>
-                    <select formControlName="state">
-                        <option value="" disabled>Select State</option>
-                        @for (state of states; track state) {
-                        <option [value]="state">{{state}}</option>
-                        }
-                    </select>
-                </div>
+        <header class="auth-header">
+            <span class="system-tag">Votta makes your voice heard..</span>
+            <h1>Create Account</h1>
+        </header>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+            <div class="field-group"
+                [class.error-field]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+                <label>NAME</label>
+                <input type="text" formControlName="name" placeholder="your name">
+                @if (registerForm.get('name')?.invalid && registerForm.get('name')?.touched) {
+                <small class="error-text">Name must be at least 2 characters.</small>
+                }
             </div>
 
-            <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" formControlName="email" placeholder="name@example.com">
+
+            <div class="field-group"
+                [class.error-field]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                <label>EMAIL</label>
+                <input type="email" formControlName="email" placeholder="name@domain.com">
+                @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+                <small class="error-text">Please enter a valid email address.</small>
+                }
             </div>
 
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" formControlName="password" placeholder="••••••••">
+
+            <div class="field-group"
+                [class.error-field]="registerForm.get('state')?.invalid && registerForm.get('state')?.touched">
+                <label>STATE</label>
+                <select formControlName="state" class="liquid-select">
+                    <option value="" disabled selected>Select your state</option>
+                    @for (state of nigerianStates; track state) {
+                    <option [value]="state">{{ state }}</option>
+                    }
+                </select>
+                @if (registerForm.get('state')?.invalid && registerForm.get('state')?.touched) {
+                <small class="error-text">State selection is required for verification.</small>
+                }
             </div>
 
-            <button type="submit" class="btn-auth" [disabled]="isLoading()">
-                {{ isLoading() ? 'Processing...' : 'Register' }}
+
+            <div class="field-group"
+                [class.error-field]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                <label>PASSWORD</label>
+                <input type="password" formControlName="password" placeholder="Min. 6 characters">
+                @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+                <small class="error-text">Access key must be at least 6 characters.</small>
+                }
+            </div>
+
+            <button type="submit" class="btn-primary-liquid" [disabled]="registerForm.invalid || isLoading()">
+                {{ isLoading() ? 'PROVISIONING...' : 'REGISTER' }}
             </button>
-        </form>
 
-        <p class="auth-nav">
-            Already have an account? <a routerLink="/login">Sign In</a>
-        </p>
+            <div class="auth-footer">
+                <p>Already registered? <a routerLink="/login">Sign In</a></p>
+            </div>
+        </form>
     </div>
 </div>

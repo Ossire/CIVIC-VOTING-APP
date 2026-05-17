@@ -24,12 +24,21 @@ export class UpdatePollDto {
   @IsOptional()
   title?: string;
 
+  @IsString()
+  @IsOptional()
+  description?: string;
+
   @IsOptional()
   @IsArray()
   @ArrayMinSize(2)
   @ValidateNested({ each: true })
   @Type(() => CreateOptionDto)
   options?: CreateOptionDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsInt({ each: true })
+  deleteOptions?: number[];
 
   @IsDateString()
   @IsOptional()

@@ -1,32 +1,40 @@
-import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../core/services/auth.service';
+// login.component.ts
+import { Component, inject, signal, OnInit } from '@angular/core';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+import { ErrorService } from '../../core/services/error.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  public errorService = inject(ErrorService);
 
-  errorMessage = signal<string | null>(null);
-  isLoading = signal<boolean>(false);
+  isLoading = signal(false);
 
   loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
+
+  ngOnInit() {
+    this.errorService.clearError();
+  }
 
   onSubmit() {
     if (this.loginForm.invalid) return;
 
     this.isLoading.set(true);
-    this.errorMessage.set(null);
+    this.errorService.clearError();
 
     this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
@@ -35,7 +43,7 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.message);
+        this.errorService.handleError(err);
       },
     });
   }

@@ -25,7 +25,36 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(dto.password, salt);
     const newUser = { ...dto, password: hashedPassword };
 
-    return this.userService.createUser(newUser);
+    await this.userService.createUser(newUser);
+
+    const user = await this.userService.findByEmailWithPassword(dto.email);
+    if (!user) {
+      throw new UnauthorizedException(
+        'Record not found. Registration might have failed',
+      );
+    }
+
+    const { password, ...data } = user;
+
+    const correctPassword = await bcrypt.compare(dto.password, password);
+    if (!correctPassword) {
+      throw new UnauthorizedException('Invalid credential.');
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      state: user.state,
+    };
+
+    const access_token = await this.jwtService.signAsync(payload);
+
+    return {
+      access_token,
+      message: 'Immediate Login after signup successful',
+    };
   }
 
   async login(dto: LoginDto) {
@@ -42,6 +71,7 @@ export class AuthService {
     const payload = {
       sub: user.id,
       email: user.email,
+      name: user.name,
       role: user.role,
       state: user.state,
     };

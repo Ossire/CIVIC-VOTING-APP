@@ -1,0 +1,84 @@
+<div class="audit-container">
+    <header class="audit-header">
+        <div class="title-wrap">
+            <span class="tag">CITIZEN_REGISTRY_V1</span>
+            <h1>Citizen Audit Log</h1>
+        </div>
+        <div class="count-badge">
+            Total Records: {{ users().length }}
+        </div>
+    </header>
+
+    @if (isLoading()) {
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <p>Decentralizing Citizen Records...</p>
+    </div>
+    }
+
+    <div class="table-wrapper glass-card">
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th>CITIZEN_NAME</th>
+                    <th>EMAIL_IDENTIFIER</th>
+                    <th>JURISDICTION</th>
+                    <th>ACTIVITY_STATUS</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (user of users(); track user.id) {
+                <tr class="user-row" [class.active]="expandedUserId() === user.id">
+                    <td class="bold">{{ user.name }}</td>
+                    <td class="muted">{{ user.email }}</td>
+                    <td>{{ user.state }}</td>
+                    <td>
+                        <span class="activity-pill">
+                            {{ user.votes.length }} Votes Cast
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn-inspect" (click)="toggleUser(user.id)">
+                            {{ expandedUserId() === user.id ? 'Close' : 'Inspect' }}
+                        </button>
+                    </td>
+                </tr>
+
+                @if (expandedUserId() === user.id) {
+                <tr class="history-row">
+                    <td colspan="5">
+                        <div class="history-expansion animate-slide">
+                            <h4 class="label">// OFFICIAL_VOTER_TAPE</h4>
+
+                            <div class="tape-container">
+                                @for (vote of user.votes; track vote.createdAt) {
+                                <div class="mini-paper-cutout">
+                                    <div class="cutout-main">
+                                        <div class="cutout-header">
+                                            <span>{{ vote.poll.title}}</span>
+                                            <span class="date">{{ vote.createdAt | date:'short' }}</span>
+                                        </div>
+                                        <div class="choice-line">
+                                            CHOICE: <strong>{{ vote.choice }}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="cutout-stub">
+                                        <span class="stamp" [class.closed]="vote.poll.status === 'closed'">
+                                            {{ vote.poll.status }}
+                                        </span>
+                                    </div>
+                                </div>
+                                } @empty {
+                                <p class="no-activity">No voting activity found for this citizen.</p>
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

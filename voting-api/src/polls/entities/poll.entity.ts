@@ -19,6 +19,9 @@ export class Poll {
   @Column()
   title: string;
 
+  @Column()
+  description: string;
+
   @Column({ unique: true })
   slug: string;
 

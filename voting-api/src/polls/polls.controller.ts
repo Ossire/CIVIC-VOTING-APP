@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
 } from '@nestjs/common';
 import { PollsService } from './polls.service';
@@ -18,13 +19,13 @@ import { User } from 'src/users/entities/user.entity';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { UpdatePollDto } from './dto/update-poll.dto';
 
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @Controller('polls')
 export class PollsController {
   constructor(private readonly pollsService: PollsService) {}
 
   @Post('create')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(RolesGuard)
   @RolesDec('admin')
   async createPoll(
     @Body() createPollDto: CreatePollDto,
@@ -34,7 +35,8 @@ export class PollsController {
   }
 
   @Post(':pollId/vote/:optionId')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(RolesGuard)
+  @RolesDec('user')
   async vote(
     @Param('pollId') pollId: string,
     @Param('optionId', ParseIntPipe) optionId: number,
@@ -43,25 +45,33 @@ export class PollsController {
     return this.pollsService.castVote(pollId, optionId, user.id);
   }
 
-  @Get(':pollId/results')
+  @Get(':pollId/result')
   async getPollResults(@Param('pollId') pollId: string, @GetUser() user: User) {
     return this.pollsService.getResults(pollId, user.id);
   }
 
   @Get()
-  async getPolls() {
-    return this.pollsService.findAll();
+  async getPolls(@GetUser() user: User) {
+    return this.pollsService.findAll(user.id);
+  }
+
+  @Get(':pollId')
+  async getPollById(
+    @Param('pollId', new ParseUUIDPipe()) pollId: string,
+    @GetUser() user: User,
+  ) {
+    return this.pollsService.findById(pollId, user.id);
   }
 
   @Delete(':pollId')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(RolesGuard)
   @RolesDec('admin')
   async deletePolll(@Param('pollId') pollId: string) {
     return this.pollsService.deletePoll(pollId);
   }
 
   @Patch(':pollId')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(RolesGuard)
   @RolesDec('admin')
   async updatePolll(
     @Param('pollId') pollId: string,
@@ -69,4 +79,15 @@ export class PollsController {
   ) {
     return this.pollsService.updatePoll(pollId, dto);
   }
+
+  @Get('user/history')
+  @UseGuards(AuthGuard('jwt'))
+  async getHistory(@GetUser() user: User) {
+    return this.pollsService.getVotedHistory(user.id);
+  }
+
+  // @Get('voter-by-state')
+  // async getVoterByState(@Query('state') state: NigerianStates, pollId: string) {
+  //   return this.pollsService.getVoterByState(state, pollId);
+  // }
 }

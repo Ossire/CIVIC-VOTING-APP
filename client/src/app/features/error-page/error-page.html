@@ -1,0 +1,17 @@
+<div class="error-container">
+    <div class="error-box glass-liquid">
+        <div class="glitch-wrapper">
+            <h1 class="error-code">404</h1>
+        </div>
+        <div class="divider"></div>
+        <h2>ROUTE_NOT_FOUND</h2>
+        <p>PAGE NOT FOUND</p>
+
+
+        @if (isLoggedIn()) {
+        <button class="btn-continue animate-in" (click)="goBack()">
+            <span class="icon">↩</span> Continue Browsing
+        </button>
+        }
+    </div>
+</div>

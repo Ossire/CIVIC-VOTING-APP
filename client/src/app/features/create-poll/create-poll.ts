@@ -53,6 +53,17 @@ export class CreatePollComponent implements OnInit {
     this.isLoading.set(true);
     this.pollService.getPollById(id).subscribe({
       next: (poll) => {
+        const isClosed = new Date(poll.endsAt) <= new Date();
+        if ((poll.voteCount || 0) > 0 || isClosed) {
+          this.isLoading.set(false);
+          this.errorService.handleError({
+            message:
+              'Access Denied: This contest has closed or already contains cast votes and cannot be modified.',
+          });
+          this.router.navigate(['/admin/dashboard']);
+          return;
+        }
+
         this.options.clear();
 
         poll.options.forEach((opt: any) => {

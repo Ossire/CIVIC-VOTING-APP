@@ -39,7 +39,14 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/polls']);
+
+        const user = this.authService.currentUser();
+
+        if (user?.role === 'admin') {
+          this.router.navigate(['/admin/dashboard']);
+        } else {
+          this.router.navigate(['/polls']);
+        }
       },
       error: (err) => {
         this.isLoading.set(false);

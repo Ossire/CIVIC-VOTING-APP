@@ -282,17 +282,27 @@
 }
 
 .history-card.is-deleted {
-  opacity: 0.55;
-  border-color: rgba(239, 68, 68, 0.15);
-  background: rgba(15, 23, 42, 0.45);
+  opacity: 0.6;
+  border-color: rgba(239, 68, 68, 0.1);
+  background: rgba(15, 23, 42, 0.4);
 }
 
 .history-card.is-deleted:hover {
-  opacity: 0.8;
+  opacity: 0.85;
+}
+
+.history-card.is-deleted .info-block h3 {
+  color: #64748b;
 }
 
 .status-chip.deleted {
-  background: rgba(239, 68, 68, 0.12);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.04);
+  color: #b91c1c;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.history-card.is-deleted .winner-badge {
+  background: rgba(245, 158, 11, 0.04);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.15);
 }

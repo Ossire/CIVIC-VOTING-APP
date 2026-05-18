@@ -170,6 +170,7 @@ export class PollsService {
       where: { id: pollId },
       relations: ['options'],
     });
+
     if (!poll) {
       throw new NotFoundException('Poll not found ');
     }
@@ -179,8 +180,33 @@ export class PollsService {
       voter: { id: userId },
     });
 
-    return { ...poll, userHasVoted: !!vote };
+    const totalVotes = await this.voteRepo.countBy({
+      poll: { id: pollId },
+    });
+
+    return {
+      ...poll,
+      userHasVoted: !!vote,
+      voteCount: totalVotes,
+    };
   }
+
+  // async findById(pollId: string, userId: string) {
+  //   const poll = await this.pollRepo.findOne({
+  //     where: { id: pollId },
+  //     relations: ['options'],
+  //   });
+  //   if (!poll) {
+  //     throw new NotFoundException('Poll not found ');
+  //   }
+
+  //   const vote = await this.voteRepo.findOneBy({
+  //     poll: { id: pollId },
+  //     voter: { id: userId },
+  //   });
+
+  //   return { ...poll, userHasVoted: !!vote };
+  // }
 
   async deletePoll(pollId: string) {
     const poll = await this.pollRepo.findOne({
@@ -256,6 +282,14 @@ export class PollsService {
 
         if (!poll || !poll.options) return null;
 
+        const pollDbRecord = await this.pollRepo.findOne({
+          where: { id: poll.id },
+          withDeleted: true,
+          select: ['id', 'deletedAt'],
+        });
+
+        const isDeleted = pollDbRecord?.deletedAt !== null;
+
         const results = await this.voteRepo
           .createQueryBuilder('vote')
           .withDeleted()
@@ -271,9 +305,8 @@ export class PollsService {
         );
 
         const isClosed = new Date() > poll.endsAt;
-
         let maxVotes = -1;
-        let winnerOption = '';
+        let winnerOption = 'None';
 
         const optionsWithStats = poll.options.map((opt) => {
           const voteData = results.find((r) => Number(r.optionId) === opt.id);
@@ -292,15 +325,17 @@ export class PollsService {
           };
         });
 
+        const shoWinner = isClosed || isDeleted;
+
         return {
           id: poll.id,
           title: poll.title,
-          status: isClosed ? 'Closed' : 'Active',
+          status: isDeleted ? 'Deleted' : isClosed ? 'Closed' : 'Active',
           votedAt: vote.createdAt,
           userChoice: vote.choice.text,
           totalVotes,
           results: optionsWithStats,
-          winner: isClosed ? winnerOption : 'Pending',
+          winner: shoWinner ? winnerOption : 'Pending',
         };
       }),
     );

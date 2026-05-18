@@ -90,7 +90,7 @@ export class AdminDashboardComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.errorService.clearError();
+    // this.errorService.clearError();
     this.loadPolls();
     this.loadTotalVoterCount();
   }

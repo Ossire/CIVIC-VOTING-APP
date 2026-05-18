@@ -16,7 +16,7 @@ export class PollListComponent implements OnInit {
   public errorService = inject(ErrorService);
 
   polls = signal<any[]>([]);
-  isLoading = signal(true);
+  isLoading = signal<boolean>(true);
 
   ngOnInit() {
     this.errorService.clearError();

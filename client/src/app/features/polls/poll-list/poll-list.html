@@ -6,16 +6,21 @@
         <button (click)="errorService.clearError()" class="close-error">✕</button>
     </div>
     }
+
     <header class="polls-header">
         <span class="system-tag"></span>
-
         <h1 class="brand-title"><span class="purple-pt">PO</span>LLS</h1>
     </header>
 
+    @if (isLoading()) {
+    <div class="loading-container animate-in">
+        <div class="spinner"></div>
+        <p>Fetching active contests...</p>
+    </div>
+    } @else {
     <div class="polls-grid">
         @for (poll of polls(); track poll.id) {
         <div class="poll-card animate-in" [class.voted]="poll.userHasVoted" [routerLink]="['/polls', poll.id]">
-
 
             @if (poll.userHasVoted) {
             <div class="voted-stamp">YOU VOTED</div>
@@ -38,15 +43,10 @@
                     <span class="count">{{ (poll.voteCount || 0) | number }}</span>
                 </div>
 
-
                 <div class="closing-info">
-
-                    <span class="label"> {{poll.status === 'Closed'? 'Ended' : 'Closing'}}</span>
-
+                    <span class="label"> {{poll.status === 'Closed' ? 'Ended' : 'Closing'}}</span>
                     <span class="date">{{ poll.endsAt | date:'MMM d / yyyy -- h:mm a' }}</span>
                 </div>
-
-
             </div>
         </div>
         } @empty {
@@ -59,4 +59,5 @@
         </div>
         }
     </div>
+    }
 </div>

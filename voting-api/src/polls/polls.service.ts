@@ -202,11 +202,17 @@ export class PollsService {
 
     const poll = await this.pollRepo.findOne({
       where: { id: pollId },
-      relations: ['options'],
+      relations: ['options', 'votes'],
     });
 
     if (!poll) {
       throw new NotFoundException('Resource does not exist');
+    }
+
+    if (poll.votes && poll.votes.length > 0) {
+      throw new BadRequestException(
+        'Rejected: This poll already has active votes and can no longer be modified.',
+      );
     }
 
     if (deleteOptions && deleteOptions.length > 0) {

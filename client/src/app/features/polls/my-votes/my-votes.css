@@ -282,7 +282,7 @@
 }
 
 .history-card.is-deleted {
-  opacity: 0.55; /* Beautifully dimmed/faded look */
+  opacity: 0.55;
   border-color: rgba(239, 68, 68, 0.15);
   background: rgba(15, 23, 42, 0.45);
 }
@@ -292,7 +292,7 @@
 }
 
 .status-chip.deleted {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.12);
   color: #f87171;
   border: 1px solid rgba(239, 68, 68, 0.25);
 }

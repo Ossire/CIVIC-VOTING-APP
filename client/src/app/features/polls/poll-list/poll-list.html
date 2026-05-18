@@ -8,7 +8,7 @@
     }
     <header class="polls-header">
         <span class="system-tag"></span>
-        <!-- First two letters purple, rest white -->
+
         <h1 class="brand-title"><span class="purple-pt">PO</span>LLS</h1>
     </header>
 
@@ -16,7 +16,7 @@
         @for (poll of polls(); track poll.id) {
         <div class="poll-card animate-in" [class.voted]="poll.userHasVoted" [routerLink]="['/polls', poll.id]">
 
-            <!-- Diagonal Voted Stamp -->
+
             @if (poll.userHasVoted) {
             <div class="voted-stamp">YOU VOTED</div>
             }
@@ -42,12 +42,20 @@
                 <div class="closing-info">
 
                     <span class="label"> {{poll.status === 'Closed'? 'Ended' : 'Closing'}}</span>
-                    <!-- Format: May 13 / 2026 -- 10:45 PM -->
+
                     <span class="date">{{ poll.endsAt | date:'MMM d / yyyy -- h:mm a' }}</span>
                 </div>
 
 
             </div>
+        </div>
+        } @empty {
+        <div class="empty-state-card animate-in">
+            <div class="empty-icon-glow">
+                <span class="empty-icon">🗳️</span>
+            </div>
+            <h2>No Active Contests</h2>
+            <p>The system administrator hasn't created any polls yet. Please check back later...</p>
         </div>
         }
     </div>

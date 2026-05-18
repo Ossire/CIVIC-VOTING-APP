@@ -22,11 +22,13 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/_redirects"
             ],
             "styles": ["src/styles.css"],
             "polyfills": ["zone.js"]
           },
+
           "configurations": {
             "production": {
               "budgets": [

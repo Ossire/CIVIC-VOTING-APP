@@ -157,6 +157,10 @@
   flex-shrink: 0;
 }
 
+.shadow-text {
+  text-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+}
+
 .stack-item {
   display: flex;
   flex-direction: column;
@@ -206,7 +210,6 @@
   background: rgba(15, 23, 42, 0.3);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.05);
-
   overflow-x: auto;
   width: 100%;
 }
@@ -384,6 +387,7 @@ input:disabled + .slider {
   color: #fff;
   padding: 5px 10px;
   border-radius: 6px;
+  font-size: 0.6 Poles;
   font-size: 0.6rem;
   white-space: nowrap;
   border: 1px solid #a855f7;
@@ -447,17 +451,43 @@ input:disabled + .slider {
 
 .empty-row {
   text-align: center;
-  padding: 4rem;
+  padding: 5rem 2rem;
+  background: rgba(255, 255, 255, 0.005);
 }
+
+.empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.empty-panel-icon {
+  font-size: 1.8rem;
+  opacity: 0.4;
+  filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.2));
+}
+
 .empty-state-content p {
   color: #64748b;
   font-family: 'Courier New', monospace;
   margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+.purple-highlight {
+  color: #a855f7;
+  font-weight: 700;
 }
 
 .animate-in {
   animation: fadeIn 0.5s ease-out forwards;
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;

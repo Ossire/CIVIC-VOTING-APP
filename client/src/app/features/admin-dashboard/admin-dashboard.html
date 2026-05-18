@@ -16,7 +16,6 @@
     </header>
 
     <div class="stats-grid">
-
         <div class="stat-card glass-liquid split-card">
             <div class="main-info">
                 <span class="label">Total Polls</span>
@@ -34,12 +33,10 @@
             </div>
         </div>
 
-
         <div class="stat-card glass-liquid">
             <span class="label">Total Votes Cast</span>
             <span class="value">{{ totalVotesCast() | number }}</span>
         </div>
-
 
         <div class="stat-card glass-liquid">
             <span class="label">Registered Voters</span>
@@ -120,7 +117,6 @@
                             <button class="btn-icon view" title="View Results"
                                 [routerLink]="['/result', poll.id]">📊</button>
 
-
                             <button class="btn-icon edit"
                                 [attr.title]="poll.status === 'Closed' ? 'Cannot edit closed polls' : (poll.voteCount! > 0 ? 'Cannot edit active poll with votes' : 'Edit Poll')"
                                 (click)="onEdit(poll)"
@@ -131,6 +127,18 @@
                         </div>
                     </td>
                 </tr>
+                } @empty {
+                @if (!isLoading()) {
+                <tr>
+                    <td colspan="5" class="empty-row">
+                        <div class="empty-state-content animate-in">
+                            <span class="empty-panel-icon">🗳️</span>
+                            <p>you haven't created any polls yet. <span class="purple-highlight">create polls</span> so
+                                users can vote...</p>
+                        </div>
+                    </td>
+                </tr>
+                }
                 }
             </tbody>
         </table>
